@@ -118,5 +118,12 @@ model.learn(total_timesteps=1000000, callback=callback)
 ################################################################################
 # print('\nTest :')
 
+model = PPO.load('./best_model_100000')
+
+while True :
+
+  action, _state = model.predict(state)
+  state, reward, done, info = env.step(action)
+  env.render()
 
 print(f'\nProcessing complete (time : {round(time.time()-start, 4)}s)')
