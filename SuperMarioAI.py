@@ -23,7 +23,7 @@ print('Done\n')
 
 print(f"{'    Reinforcement learning modules' :-<50}", end="")
 from stable_baselines3 import PPO
-from stable_baselines3.common.callbacks import BaseCallback
+from TrainAndLoggingCallback import TrainAndLoggingCallback
 print('Done\n')
 
 ################################################################################
@@ -97,11 +97,21 @@ plt.figure()
 plt.imshow(state[0])
 plt.savefig('./fig/Vector_frame_stack_environement.png')
 
+
 ################################################################################
 #                              Train the RL model                              #
 ################################################################################
 print('\nModel training :')
+CHECKPOINT_DIR = './train'
+LOG_DIR = './logs'
 
+callback = TrainAndLoggingCallback(check_freq=20000, save_path=CHECKPOINT_DIR)
+
+# Building model
+model = PPO('CnnPolicy', env, verbose=1, tensorboard_log=LOG_DIR, learning_rate=0.000001, n_steps=512)
+
+# Train model
+model.learn(total_timesteps=1000000, callback=callback)
 
 ################################################################################
 #                                 Test it out                                  #
